@@ -44,7 +44,7 @@ public class DipendentiService {
                     throw new BadRequestException("Esiste già un dipendente con questa email " + body.email());
                 }
         );
-        Dipendente newDipendente = new Dipendente(body.username(), body.nome(), body.cognome(), body.email());
+        Dipendente newDipendente = new Dipendente(body.username(), body.password(), body.nome(), body.cognome(), body.email());
         newDipendente.setAvatar("https://ui-avatars.com/api/?name=" + body.nome() + "+" + body.cognome());
         return this.dipendentiRepository.save(newDipendente);
     }
@@ -66,6 +66,10 @@ public class DipendentiService {
     public void findByIdAndDelete(UUID dipendenteId) {
         Dipendente found = this.findById(dipendenteId);
         this.dipendentiRepository.delete(found);
+    }
+
+    public Dipendente findByEmail(String email) {
+        return this.dipendentiRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Utente con email " + email + " non trovato!"));
     }
 
     public Dipendente uploadImage(UUID dipendenteId, MultipartFile file) throws IOException {

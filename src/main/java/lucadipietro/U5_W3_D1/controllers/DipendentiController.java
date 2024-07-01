@@ -26,16 +26,6 @@ public class DipendentiController {
         return this.dipendentiService.getDipendenti(page,size,sortBy);
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Dipendente saveDipendente(@RequestBody @Validated DipendentiDTO body, BindingResult validationResult){
-        if(validationResult.hasErrors()){
-            throw new BadRequestException(validationResult.getAllErrors());
-        } else {
-            return this.dipendentiService.save(body);
-        }
-    }
-
     @GetMapping("/{dipendenteId}")
     public Dipendente findById(@PathVariable UUID dipendenteId){
         return this.dipendentiService.findById(dipendenteId);

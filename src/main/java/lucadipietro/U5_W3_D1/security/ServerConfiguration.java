@@ -30,10 +30,10 @@ public class ServerConfiguration {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.formLogin(http -> http.disable());
-        httpSecurity.csrf(http -> http.disable());
-        httpSecurity.sessionManagement(http -> http.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        httpSecurity.authorizeHttpRequests(http -> http.requestMatchers("/**").permitAll());
+        httpSecurity.formLogin(http -> http.disable()); // Disabilita il supporto per il form login.
+        httpSecurity.csrf(http -> http.disable());  // Disabilita la protezione CSRF (Complicherebbe il tutto per le nostre app)
+        httpSecurity.sessionManagement(http -> http.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Non voglio le sessioni (perché con JWT non si utilizzano le sessioni)
+        httpSecurity.authorizeHttpRequests(http -> http.requestMatchers("/**").permitAll()); // Evita di avere 401 per ogni richiesta
         return httpSecurity.build();
     }
 }

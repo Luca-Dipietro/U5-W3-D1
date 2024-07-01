@@ -20,19 +20,18 @@ public class JWTTokenConfiguration {
 
     public String createToken(Dipendente dipendente){
         return Jwts.builder()
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
-                .subject(String.valueOf(dipendente.getId()))
-                .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
+                .issuedAt(new Date(System.currentTimeMillis())) // Data di emissione del token
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)) // Data di scadenza del token (una settimana)
+                .subject(String.valueOf(dipendente.getId())) // ID del dipendente come soggetto del token (ATTENZIONE A NON INSERIRE DATI SENSIBILI QUA DENTRO!!!!!!)
+                .signWith(Keys.hmacShaKeyFor(secret.getBytes())) // Firma del token con la chiave segreta
                 .compact();
     }
 
     public void verifyToken(String token){
         try {
-            Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secret.getBytes())).build().parse(token);
-
+            Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secret.getBytes())).build().parse(token); // Il metodo .parse(token) mi lancerà varie eccezioni in caso di token scaduto o malformato o manipolato
         } catch (Exception ex){
-            throw new UnauthorizedException("Errore col token, preghiamo di riprovare a fare il login!");
+            throw new UnauthorizedException("Errore col token, preghiamo di riprovare a fare il login!"); // Se la verifica fallisce, lancia un'eccezione di non autorizzato con status 401
         }
     }
 }
